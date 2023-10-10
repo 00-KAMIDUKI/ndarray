@@ -25,22 +25,22 @@
 
 #include <array>
 
-namespace ndarray {
+namespace nda {
 template <typename, std::size_t...>
-struct ndarray;
+struct basic_ndarray;
 
 template <typename _T, std::size_t __n, std::size_t... __ns>
-struct ndarray<_T, __n, __ns...> {
-  using type = typename ndarray<std::array<_T, __n>, __ns...>::type;
+struct basic_ndarray<_T, __n, __ns...> {
+  using type = typename basic_ndarray<std::array<_T, __n>, __ns...>::type;
 };
 
 template <typename _T>
-struct ndarray<_T> {
+struct basic_ndarray<_T> {
   using type = _T;
 };
 
 template <typename _T, std::size_t... __ns>
-using ndarray_t = typename ndarray<_T, __ns...>::type;
+using ndarray = typename basic_ndarray<_T, __ns...>::type;
 }
 
 #endif //_NDARRAY_NDARRAY_H
