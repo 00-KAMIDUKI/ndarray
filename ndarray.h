@@ -23,6 +23,40 @@
 #ifndef _NDARRAY_NDARRAY_H
 #define _NDARRAY_NDARRAY_H
 
+#if __cplusplus >= 201703L
+
+#include <array>
+
+#if __cplusplus >= 202002L
+#include <span>
+#endif
+
+namespace nda {
+template <template <typename, std::size_t> typename, typename, std::size_t...>
+struct basic_ndarray;
+
+template <template <typename, std::size_t> typename __arr_t, typename _T, std::size_t __n, std::size_t... __ns>
+struct basic_ndarray<__arr_t, _T, __n, __ns...> {
+  using type = typename basic_ndarray<__arr_t, __arr_t<_T, __n>, __ns...>::type;
+};
+
+template <template <typename, std::size_t> typename __arr_t, typename _T>
+struct basic_ndarray<__arr_t, _T> {
+  using type = _T;
+};
+
+template <typename _T, std::size_t... __ns>
+using ndarray = typename basic_ndarray<std::array, _T, __ns...>::type;
+
+#if __cplusplus >= 202002L
+template <typename _T, std::size_t... __ns>
+using ndspan = typename basic_ndarray<std::span, _T, __ns...>::type;
+#endif
+
+}
+
+#else // if __cplusplus < 201703L
+
 #include <array>
 
 namespace nda {
@@ -43,5 +77,6 @@ template <typename _T, std::size_t... __ns>
 using ndarray = typename basic_ndarray<_T, __ns...>::type;
 }
 
+#endif // __cplusplus >= 201703L
 #endif //_NDARRAY_NDARRAY_H
 
